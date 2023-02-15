@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useState } from 'react';
 
-import { TGridType, IGridContext } from '../types';
+import { TGridType, IGridContext } from '../types/grid';
 import { TGridSizeType } from '../types/grid';
 
 const INITIAL_GRID: IGridContext = {
-  grid: [[]],
+  grid: undefined,
   gridSize: {
     rows: 0,
     columns: 0,
@@ -20,7 +20,7 @@ const INITIAL_GRID: IGridContext = {
 const GridContext = createContext<IGridContext>(INITIAL_GRID);
 
 const GridProvider = ({ children }: { children: React.ReactNode }) => {
-  const [grid, setGrid] = useState<TGridType | undefined>(undefined);
+  const [grid, setGrid] = useState<TGridType>(undefined);
   const [gridSize, setGridSize] = useState<TGridSizeType>({
     rows: 4,
     columns: 8,
@@ -34,6 +34,8 @@ const GridProvider = ({ children }: { children: React.ReactNode }) => {
 
   const nextMove = () => {
     setGenerationStep((prev) => prev + 1);
+
+    // here we should calculate the next move ??
   };
 
   return (

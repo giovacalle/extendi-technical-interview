@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 
-export type TGridType = string[][];
+export type TGridType = string[][] | undefined;
 
 export type TGridSizeType = {
   rows: number;

@@ -30,7 +30,6 @@ const Grid = ({ rows, columns, grid, onCellClick, id }: IGridProps) => {
     >
       {grid &&
         grid.flat().map((cell, i) => {
-          console.log(cell);
           return (
             <div key={i} className="text-3xl bg-quaternary text-quinary">
               <button

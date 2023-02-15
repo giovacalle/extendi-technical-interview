@@ -13,6 +13,13 @@ const Settings = () => {
 
   const { setGenerationStep, setGrid, setGridSize } = useGrid();
 
+  const resetSettings = () => {
+    setRows(0);
+    setColumns(0);
+    setGridTmp(undefined);
+    setSettingsOpen(false);
+  };
+
   const changeRowsHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRows(Number((e.target as HTMLInputElement).value));
   };
@@ -22,11 +29,10 @@ const Settings = () => {
   };
 
   const gridCellClickHandler = (index: number) => {
-    if (!gridTmp) {
-      setGridTmp(Array.from({ length: rows }, () => Array(columns).fill('')));
-    }
-
     setGridTmp((prev) => {
+      if (!prev)
+        return Array.from({ length: rows }, () => Array(columns).fill(''));
+
       const newGrid = [...prev];
       newGrid[Math.floor(index / columns)][index % columns] = '*';
       return newGrid;
@@ -45,7 +51,7 @@ const Settings = () => {
     setGridSize({ rows, columns });
     setGrid(gridTmp);
 
-    setSettingsOpen(false);
+    resetSettings();
   };
 
   return (
@@ -61,12 +67,7 @@ const Settings = () => {
       <Modal
         isOpen={settingsOpen}
         title="Game settings"
-        onClose={() => {
-          setSettingsOpen(false);
-          setRows(0);
-          setColumns(0);
-          setGridTmp(undefined);
-        }}
+        onClose={() => resetSettings()}
       >
         <p>
           Set state of the game in order to control the Life of cells (check
