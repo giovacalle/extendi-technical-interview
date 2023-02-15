@@ -23,5 +23,7 @@
       }
     }
   },
-  "rules": {}
+  "rules": {
+    "no-empty-function": "off"
+  }
 }
