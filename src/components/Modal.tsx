@@ -7,20 +7,25 @@ type ModalProps = {
   children: ReactNode;
 };
 
-const Modal: React.FC<ModalProps> = ({ isOpen, title, onClose, children }) => {
+const Modal = ({ isOpen, title, onClose, children }: ModalProps) => {
   return (
     <>
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40 flex items-center justify-center overflow-x-hidden overflow-y-auto text-quinary">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div
+              className="fixed inset-0 transition-opacity"
+              aria-hidden="true"
+            >
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
             <div className="relative z-50 w-auto mx-auto my-6">
               <div className="w-max max-w-lg bg-secondary shadow-md rounded-lg">
                 <div className="p-4">
                   <div className="flex items-center justify-between gap-5">
-                    <h2 className="text-lg font-medium text-primary">{title}</h2>
+                    <h2 className="text-lg font-medium text-primary">
+                      {title}
+                    </h2>
                     <button
                       type="button"
                       title="Close modal"

@@ -1,42 +1,57 @@
 import React, { useRef, useState } from 'react';
 import { useGrid } from '../store/grid';
-import { TGridType } from '../types/grid';
+import { TGridCell, TGridSizeType, TGridType } from '../types/grid';
 import Grid from './Grid';
 import Modal from './Modal';
 
 const Settings = () => {
-  const [rows, setRows] = useState(0);
-  const [columns, setColumns] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [gridTmp, setGridTmp] = useState<TGridType | undefined>(undefined);
   const generationRef = useRef<HTMLInputElement | null>(null);
+  const [gridSizeTmp, setGridSizeTmp] = useState<TGridSizeType>({
+    rows: 0,
+    columns: 0,
+  });
+  const gridTmp = useRef<TGridType>(undefined);
 
   const { setGenerationStep, setGrid, setGridSize } = useGrid();
 
   const resetSettings = () => {
-    setRows(0);
-    setColumns(0);
-    setGridTmp(undefined);
+    setGridSizeTmp({ rows: 0, columns: 0 });
+    gridTmp.current = undefined;
     setSettingsOpen(false);
   };
 
   const changeRowsHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRows(Number((e.target as HTMLInputElement).value));
+    const rows = parseInt(e.target.value);
+    setGridSizeTmp((prev) => ({ ...prev, rows: isNaN(rows) ? 0 : rows }));
+    gridTmp.current = undefined;
   };
 
   const changeColumnsHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setColumns(Number((e.target as HTMLInputElement).value));
+    const columns = parseInt(e.target.value);
+    setGridSizeTmp((prev) => ({
+      ...prev,
+      columns: isNaN(columns) ? 0 : columns,
+    }));
+    gridTmp.current = undefined;
   };
 
-  const gridCellClickHandler = (index: number) => {
-    setGridTmp((prev) => {
-      if (!prev)
-        return Array.from({ length: rows }, () => Array(columns).fill(''));
+  const gridCellClickHandler = (index: number, value: TGridCell) => {
+    if (!gridTmp.current) {
+      gridTmp.current = Array.from({ length: gridSizeTmp.rows }, () =>
+        Array(gridSizeTmp.columns).fill(''),
+      );
+    }
 
-      const newGrid = [...prev];
-      newGrid[Math.floor(index / columns)][index % columns] = '*';
-      return newGrid;
-    });
+    const newGrid = [...gridTmp.current];
+
+    // if we have a matrix we could make it flat and get the index
+    // but in this case is the opposite cause we have the index and not the coordinates
+    newGrid[Math.floor(index / gridSizeTmp.columns)][
+      index % gridSizeTmp.columns
+    ] = value;
+
+    gridTmp.current = newGrid;
   };
 
   const clickSaveHandler = () => {
@@ -48,9 +63,8 @@ const Settings = () => {
     }
 
     setGenerationStep(generationStep);
-    setGridSize({ rows, columns });
-    setGrid(gridTmp);
-
+    setGridSize(gridSizeTmp);
+    setGrid(gridTmp.current);
     resetSettings();
   };
 
@@ -70,7 +84,7 @@ const Settings = () => {
         onClose={() => resetSettings()}
       >
         <p>
-          Set state of the game in order to control the Life of cells (check
+          Set state of the game in order to control the life of cells (check
           info for details)
         </p>
         <div className="mt-5 flex flex-col items-center justify-center gap-4">
@@ -97,20 +111,20 @@ const Settings = () => {
             />
           </div>
           <label htmlFor="grid-initial">Population state</label>
-          {rows <= 0 && columns <= 0 && (
+          {gridSizeTmp.rows <= 0 && gridSizeTmp.columns <= 0 && (
             <p className="text-red-500">Please set the grid size first</p>
           )}
-          {rows <= 0 && columns > 0 && (
+          {gridSizeTmp.rows <= 0 && gridSizeTmp.columns > 0 && (
             <p className="text-red-500">Please set the rows size first</p>
           )}
-          {columns <= 0 && rows > 0 && (
+          {gridSizeTmp.columns <= 0 && gridSizeTmp.rows > 0 && (
             <p className="text-red-500">Please set the columns size first</p>
           )}
-          {rows > 0 && columns > 0 && (
+          {gridSizeTmp.rows > 0 && gridSizeTmp.columns > 0 && (
             <Grid
               id="grid-initial"
-              rows={rows}
-              columns={columns}
+              rows={gridSizeTmp.rows}
+              columns={gridSizeTmp.columns}
               onCellClick={gridCellClickHandler}
             />
           )}

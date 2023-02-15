@@ -10,11 +10,11 @@ function App() {
     <>
       <Modal
         isOpen={infoOpen}
-        title="Game of life instructions"
+        title="Game Of Life instructions"
         onClose={() => setInfoOpen(false)}
       >
         <p className="text-quinary">
-          The Game of Life is not your typical computer game. It is a cellular
+          The Game Of Life is not your typical computer game. It is a cellular
           automaton, and was invented by Cambridge mathematician John Conway.
           This game became widely known when it was mentioned in an article
           published by Scientific American in 1970. It consists of a grid of
@@ -24,12 +24,14 @@ function App() {
         </p>
       </Modal>
       <header className="h-[70px] flex items-center justify-between">
-        <h1 className="text-2xl">Game of Life</h1>
+        <h1 className="text-2xl">Game Of Life</h1>
         <button
           type="button"
           title="Open instructions modal"
           className="py-2 px-5 bg-tertiary rounded-md text-quinary"
-          onClick={() => setInfoOpen(true)}
+          onClick={() => {
+            setInfoOpen(true);
+          }}
         >
           Info
         </button>

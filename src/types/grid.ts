@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction } from 'react';
+export type TGridCell = '*' | '';
 
-export type TGridType = string[][] | undefined;
+export type TGridType = TGridCell[][] | undefined;
 
 export type TGridSizeType = {
   rows: number;
@@ -11,9 +11,9 @@ export interface IGridContext {
   grid: TGridType;
   gridSize: TGridSizeType;
   generationStep: number;
-  setGenerationStep: Dispatch<SetStateAction<number>>;
-  setGridSize: Dispatch<SetStateAction<TGridSizeType>>;
-  setGrid: Dispatch<SetStateAction<TGridType>>;
+  setGenerationStep: (generation: number) => void;
+  setGridSize: (size: TGridSizeType) => void;
+  setGrid: (grid: TGridType) => void;
   nextMove: () => void;
   reset: () => void;
 }
